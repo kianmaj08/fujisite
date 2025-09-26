@@ -33,39 +33,40 @@ class SimpleRouter {
         <div class="panel" tabindex="0" role="button" aria-label="Panel 1">
           <div class="panel-content">
             <h3>Panel 1</h3>
-            <p>Dies ist der erste Inhaltsbereich. Hier können später weitere Informationen und Funktionen ergänzt werden.</p>
-            <p>Die Struktur ist modular aufgebaut und ermöglicht einfache Erweiterungen.</p>
+            <p>Dies ist der erste Inhaltsbereich im neuen Liquid-Glass-Design. Die Karten verwenden jetzt erweiterte Glasmorphismus-Effekte.</p>
+            <p>Mit rotierenden Glanz-Effekten und verbesserter Tiefe durch mehrschichtige Schatten und Backdrop-Filter.</p>
           </div>
         </div>
 
         <div class="panel" tabindex="0" role="button" aria-label="Panel 2">
           <div class="panel-content">
             <h3>Panel 2</h3>
-            <p>Zweiter Bereich mit Liquid-Glass-Design. Alle Panels verwenden die gleiche Basis-Struktur.</p>
-            <p>Hover-Effekte und 3D-Transformationen sind bereits implementiert.</p>
+            <p>Zweiter Bereich mit verstärktem Liquid-Glass-Design. Das Fuji-Bild ist nun durchgängig als Hintergrund sichtbar.</p>
+            <p>Hover-Effekte mit 3D-Transformationen und animierten Gloss-Sweeps sorgen für eine lebendige Interaktion.</p>
           </div>
         </div>
 
         <div class="panel" tabindex="0" role="button" aria-label="Panel 3">
           <div class="panel-content">
             <h3>Panel 3</h3>
-            <p>Dritter Inhaltsbereich mit responsivem Grid-Layout. Das Design passt sich automatisch an verschiedene Bildschirmgrößen an.</p>
+            <p>Dritter Inhaltsbereich mit verbesserter Transparenz und Sättigung. Die Backdrop-Filter erzeugen den charakteristischen Liquid-Effekt.</p>
+            <p>Responsives Grid-Layout passt sich automatisch an verschiedene Bildschirmgrößen an.</p>
           </div>
         </div>
 
         <div class="panel" tabindex="0" role="button" aria-label="Panel 4">
           <div class="panel-content">
             <h3>Panel 4</h3>
-            <p>Vierter Bereich mit Barrierefreiheits-Features. Alle Interaktionselemente sind tastaturzugänglich.</p>
-            <p>ARIA-Labels und semantisches HTML sorgen für gute Screenreader-Kompatibilität.</p>
+            <p>Vierter Bereich mit Barrierefreiheits-Features und verbesserter Lesbarkeit durch Textschatten.</p>
+            <p>Alle Interaktionselemente sind tastaturzugänglich und unterstützen Screenreader optimal.</p>
           </div>
         </div>
 
         <div class="panel" tabindex="0" role="button" aria-label="Panel 5">
           <div class="panel-content">
             <h3>Panel 5</h3>
-            <p>Fünfter und letzter Panel-Bereich. Das System kann einfach durch weitere Panels oder neue Routen erweitert werden.</p>
-            <p>Die Router-Architektur unterstützt Hash-basierte Navigation für SPA-Funktionalität.</p>
+            <p>Fünfter Panel mit vollständiger Liquid-Glass-Implementierung. Rotierende Gradient-Effekte und Sweep-Animationen.</p>
+            <p>Das modulare Router-System ermöglicht weiterhin einfache Erweiterungen mit neuen Seiten und Funktionen.</p>
           </div>
         </div>
       </div>
@@ -81,7 +82,7 @@ class SimpleRouter {
           <div class="panel-content">
             <h3>Über uns</h3>
             <p>Informationen über das Oberstufe.site Projekt und das Team dahinter.</p>
-            <p>Diese Seite kann später mit detaillierten Inhalten gefüllt werden.</p>
+            <p>Diese Seite kann später mit detaillierten Inhalten im neuen Liquid-Glass-Design gefüllt werden.</p>
           </div>
         </div>
       </div>
@@ -97,7 +98,7 @@ class SimpleRouter {
           <div class="panel-content">
             <h3>Kontakt</h3>
             <p>Hier können später Kontaktinformationen und ein Kontaktformular eingefügt werden.</p>
-            <p>Das modulare System ermöglicht einfache Erweiterungen.</p>
+            <p>Das modulare System mit Liquid-Glass-Panels ermöglicht einfache Erweiterungen.</p>
           </div>
         </div>
       </div>
@@ -109,7 +110,7 @@ class SimpleRouter {
   initPanelEffects() {
     const panels = document.querySelectorAll('.panel');
     panels.forEach(panel => {
-      // 3D-Tilt-Effekt
+      // Enhanced 3D-Tilt-Effekt für Liquid Glass
       panel.addEventListener('pointermove', (e) => {
         if (!panel.matches(':hover')) return;
 
@@ -120,10 +121,10 @@ class SimpleRouter {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = (y - centerY) / centerY * -10;
-        const rotateY = (x - centerX) / centerX * 10;
+        const rotateX = (y - centerY) / centerY * -8;
+        const rotateY = (x - centerX) / centerX * 8;
 
-        panel.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        panel.style.transform = `translateY(-12px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
       });
 
       panel.addEventListener('pointerleave', () => {
@@ -233,16 +234,26 @@ class SakuraManager {
     }
   }
 
-  createPetal(size = 20, duration = 12000, delay = 0) {
+  createPetal(size = 20, duration = 12000, delay = 0, isLoading = false) {
     if (!this.isEnabled || this.prefersReducedMotion) return null;
 
     const petal = document.createElement('div');
     petal.className = 'sakura-petal';
 
-    // Zufällige Eigenschaften
-    const startX = Math.random() * window.innerWidth + 100;
-    const startY = -50 - (Math.random() * 100);
+    // Verschiedene Start-Positionen je nach Modus
+    let startX, startY;
+    if (isLoading) {
+      // Ladeanimation: von oben rechts
+      startX = window.innerWidth + 50 + (Math.random() * 200);
+      startY = -100 - (Math.random() * 200);
+    } else {
+      // Normale Animation
+      startX = Math.random() * window.innerWidth + 100;
+      startY = -50 - (Math.random() * 100);
+    }
+
     const rotation = Math.random() * 360;
+    const animationType = isLoading ? 'loadingSwoosh' : 'flowAcross';
 
     petal.style.cssText = `
       width: ${size}px;
@@ -250,11 +261,36 @@ class SakuraManager {
       left: ${startX}px;
       top: ${startY}px;
       transform: rotate(${rotation}deg);
-      animation: flowAcross ${duration}ms linear ${delay}ms forwards, 
+      animation: ${animationType} ${duration}ms linear ${delay}ms forwards, 
                  windSway ${4000 + Math.random() * 2000}ms ease-in-out infinite;
     `;
 
     return petal;
+  }
+
+  // Neue Ladeanimation: von oben rechts nach unten links
+  spawnLoadingBurst() {
+    if (!this.isEnabled || this.prefersReducedMotion) return;
+
+    const petalCount = 50 + Math.floor(Math.random() * 30); // 50-80 Blätter
+
+    for (let i = 0; i < petalCount; i++) {
+      const size = 12 + Math.random() * 20; // 12-32px
+      const duration = 3000 + Math.random() * 2000; // 3-5s für längere Sichtbarkeit
+      const delay = Math.random() * 1500; // Gestaffelt
+
+      const petal = this.createPetal(size, duration, delay, true);
+      if (petal) {
+        this.sakuraLayer.appendChild(petal);
+
+        // Entfernen nach Animation
+        setTimeout(() => {
+          if (petal.parentNode) {
+            petal.parentNode.removeChild(petal);
+          }
+        }, duration + delay + 500);
+      }
+    }
   }
 
   spawnSwooshBurst() {
@@ -562,7 +598,7 @@ class CursorGlow {
 }
 
 // ==========================================
-// SCROLL EFFECTS
+// SCROLL EFFECTS & SCROLL TO TOP
 // ==========================================
 
 class ScrollManager {
@@ -570,11 +606,17 @@ class ScrollManager {
     this.navbar = document.querySelector('.navbar');
     this.heroTitle = document.querySelector('.hero-title');
     this.heroSubtitle = document.querySelector('.hero-subtitle');
+    this.scrollTopBtn = document.getElementById('scroll-top');
     this.init();
   }
 
   init() {
     window.addEventListener('scroll', this.handleScroll.bind(this));
+
+    // Scroll to top button
+    if (this.scrollTopBtn) {
+      this.scrollTopBtn.addEventListener('click', this.scrollToTop.bind(this));
+    }
 
     // Trigger initial scroll check
     this.handleScroll();
@@ -591,6 +633,93 @@ class ScrollManager {
         this.navbar.classList.remove('scrolled');
       }
     }
+
+    // Scroll to top button visibility
+    if (this.scrollTopBtn) {
+      if (scrollY > 300) {
+        this.scrollTopBtn.classList.add('visible');
+      } else {
+        this.scrollTopBtn.classList.remove('visible');
+      }
+    }
+  }
+
+  scrollToTop() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.scrollTo({
+      top: 0,
+      behavior: reducedMotion ? 'auto' : 'smooth'
+    });
+  }
+}
+
+// ==========================================
+// SETTINGS PANEL
+// ==========================================
+
+class SettingsManager {
+  constructor() {
+    this.settingsBtn = document.getElementById('settings-btn');
+    this.settingsPanel = document.getElementById('settings-panel');
+    this.settingsClose = document.getElementById('settings-close');
+    this.isOpen = false;
+    this.init();
+  }
+
+  init() {
+    if (this.settingsBtn) {
+      this.settingsBtn.addEventListener('click', this.toggleSettings.bind(this));
+    }
+
+    if (this.settingsClose) {
+      this.settingsClose.addEventListener('click', this.closeSettings.bind(this));
+    }
+
+    // Schließen bei Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.closeSettings();
+      }
+    });
+
+    // Schließen bei Klick außerhalb
+    this.settingsPanel.addEventListener('click', (e) => {
+      if (e.target === this.settingsPanel) {
+        this.closeSettings();
+      }
+    });
+  }
+
+  toggleSettings() {
+    if (this.isOpen) {
+      this.closeSettings();
+    } else {
+      this.openSettings();
+    }
+  }
+
+  openSettings() {
+    this.isOpen = true;
+    this.settingsPanel.classList.add('open');
+    this.settingsPanel.setAttribute('aria-hidden', 'false');
+
+    // Focus management
+    const firstFocusable = this.settingsPanel.querySelector('button, input, select, textarea, [tabindex]');
+    if (firstFocusable) {
+      firstFocusable.focus();
+    }
+  }
+
+  closeSettings() {
+    this.isOpen = false;
+    this.settingsPanel.classList.remove('open');
+    this.settingsPanel.setAttribute('aria-hidden', 'true');
+
+    // Return focus to settings button
+    if (this.settingsBtn) {
+      this.settingsBtn.focus();
+    }
   }
 }
 
@@ -606,7 +735,9 @@ class App {
     this.searchManager = null;
     this.cursorGlow = null;
     this.scrollManager = null;
+    this.settingsManager = null;
     this.loader = document.getElementById('loader');
+    this.blurOverlay = document.getElementById('blur-overlay');
   }
 
   async init() {
@@ -622,6 +753,7 @@ class App {
     this.searchManager = new SearchManager();
     this.cursorGlow = new CursorGlow();
     this.scrollManager = new ScrollManager();
+    this.settingsManager = new SettingsManager();
 
     // Initialize router
     this.router = new SimpleRouter();
@@ -630,27 +762,39 @@ class App {
     // Initial route rendering
     this.router.handleRoute();
 
-    // Start intro animation sequence
+    // Start enhanced intro animation sequence
     await this.startIntroSequence();
   }
 
   async startIntroSequence() {
-    // Schneller Sakura-Swoosh
-    this.sakuraManager.spawnSwooshBurst();
+    // Starte Sakura Ladeanimation (von oben rechts nach unten links)
+    this.sakuraManager.spawnLoadingBurst();
 
-    // Warte kurz für den Swoosh
+    // Warte 2 Sekunden für die Sakura-Animation, dann beginne Blur-Reduktion
+    setTimeout(() => {
+      this.hideBlurOverlay();
+    }, 2000);
+
+    // Verstecke Loader nach 3 Sekunden und zeige Hero-Text
     setTimeout(() => {
       this.hideLoader();
       this.showHeroText();
-    }, 1500);
+    }, 3000);
 
-    // Fallback: Loader nach 3s verstecken
+    // Fallback: Loader nach 5s verstecken
     setTimeout(() => {
       if (!this.loader.classList.contains('hidden')) {
+        this.hideBlurOverlay();
         this.hideLoader();
         this.showHeroText();
       }
-    }, 3000);
+    }, 5000);
+  }
+
+  hideBlurOverlay() {
+    if (this.blurOverlay) {
+      this.blurOverlay.classList.add('hidden');
+    }
   }
 
   hideLoader() {
