@@ -3,11 +3,11 @@
    ========================================== */
 :root {
   /* Light Theme */
-  --bg-primary: rgba(255, 255, 255, 0.95);
-  --bg-secondary: rgba(255, 255, 255, 0.85);
-  --text-primary: rgba(0, 0, 0, 0.9);
-  --text-secondary: rgba(0, 0, 0, 0.7);
-  --text-muted: rgba(0, 0, 0, 0.5);
+  --bg-primary: transparent;
+  --bg-secondary: rgba(255, 255, 255, 0.1);
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.6);
   --glass-bg: rgba(255, 255, 255, 0.15);
   --glass-bg-hover: rgba(255, 255, 255, 0.25);
   --glass-border: rgba(255, 255, 255, 0.45);
@@ -16,11 +16,13 @@
   --panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.10));
   --overlay-dark: rgba(0, 0, 0, 0.4);
   --glow-color: rgba(255, 255, 255, 0.3);
+  --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.12));
+  --card-border: rgba(255, 255, 255, 0.3);
 }
 
 [data-theme="dark"] {
-  --bg-primary: rgba(20, 20, 30, 0.95);
-  --bg-secondary: rgba(30, 30, 40, 0.85);
+  --bg-primary: transparent;
+  --bg-secondary: rgba(20, 20, 30, 0.1);
   --text-primary: rgba(255, 255, 255, 0.95);
   --text-secondary: rgba(255, 255, 255, 0.8);
   --text-muted: rgba(255, 255, 255, 0.6);
@@ -32,6 +34,8 @@
   --panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
   --overlay-dark: rgba(0, 0, 0, 0.6);
   --glow-color: rgba(100, 150, 255, 0.4);
+  --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  --card-border: rgba(255, 255, 255, 0.2);
 }
 
 * {
@@ -60,10 +64,44 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-primary);
-  background: var(--bg-primary);
+  background: url('assets/fuji-bg.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+}
+
+/* Durchgängiges Hintergrundbild */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4));
+  z-index: -1;
+}
+
+/* ==========================================
+   BLUR OVERLAY FÜR LADEANIMATION
+   ========================================== */
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 8888;
+  transition: backdrop-filter 2s ease, opacity 1s ease;
+}
+
+.blur-overlay.hidden {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ==========================================
@@ -73,13 +111,15 @@ body {
   position: absolute;
   top: -40px;
   left: 6px;
-  background: var(--bg-primary);
+  background: var(--glass-bg);
   color: var(--text-primary);
   padding: 8px;
   z-index: 1000;
   text-decoration: none;
   border-radius: 4px;
   border: 2px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .skip-link:focus {
@@ -88,7 +128,7 @@ body {
 }
 
 /* ==========================================
-   LOADER
+   LOADER MIT SAKURA
    ========================================== */
 .loader {
   position: fixed;
@@ -96,12 +136,12 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--overlay-dark);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 1s ease, visibility 1s ease;
 }
 
 .loader.hidden {
@@ -109,13 +149,26 @@ body {
   visibility: hidden;
 }
 
+.loader-content {
+  text-align: center;
+  color: var(--text-primary);
+}
+
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid var(--glass-border);
-  border-top: 3px solid var(--text-primary);
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--glass-border);
+  border-top: 4px solid var(--text-primary);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1.5s linear infinite;
+  margin: 0 auto 2rem;
+}
+
+.loader-text {
+  font-size: 1.2rem;
+  font-weight: 300;
+  opacity: 0.9;
+  margin-top: 1rem;
 }
 
 @keyframes spin {
@@ -133,21 +186,33 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 10;
+  z-index: 8900;
 }
 
 .sakura-petal {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-image: url('sakura-leaf.svg');
+  background-image: url('assets/sakura-leaf.svg');
   background-size: contain;
   background-repeat: no-repeat;
   pointer-events: none;
   opacity: 0.8;
 }
 
-/* Schneller Swoosh beim Laden */
+/* Ladeanimation: von oben rechts nach unten links */
+@keyframes loadingSwoosh {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100vw, 80vh) rotate(720deg) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* Schneller Swoosh beim normalen Betrieb */
 @keyframes swooshAcross {
   0% {
     transform: translate(0, 0) rotate(0deg) scale(1);
@@ -178,6 +243,146 @@ body {
 }
 
 /* ==========================================
+   SCROLL TO TOP BUTTON
+   ========================================== */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1000;
+  box-shadow: var(--glass-shadow);
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--glass-shadow), 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
+   SETTINGS BUTTON & PANEL
+   ========================================== */
+.settings-btn {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.settings-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1002;
+  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow-y: auto;
+}
+
+.settings-panel.open {
+  right: 0;
+}
+
+.settings-content {
+  margin: 2rem;
+  height: calc(100vh - 4rem);
+}
+
+.glass-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: saturate(140%) blur(20px);
+  -webkit-backdrop-filter: saturate(140%) blur(20px);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  height: 100%;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.settings-header h2 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.settings-body {
+  color: var(--text-secondary);
+}
+
+.settings-placeholder {
+  margin-top: 2rem;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Mobile Settings Panel */
+@media (max-width: 768px) {
+  .settings-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+
+  .settings-content {
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+  }
+}
+
+/* ==========================================
    CURSOR GLOW
    ========================================== */
 .cursor-glow {
@@ -204,11 +409,6 @@ body {
 .hero {
   position: relative;
   height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('fuji-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,7 +422,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--overlay-dark);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .hero-content {
@@ -448,9 +648,9 @@ body {
 .main-content {
   position: relative;
   z-index: 2;
-  background: var(--bg-primary);
   min-height: 100vh;
   padding: 2rem 0;
+  background: transparent;
 }
 
 .app-container {
@@ -460,7 +660,7 @@ body {
 }
 
 /* ==========================================
-   PANELS (LIQUID GLASS)
+   LIQUID GLASS CARDS/PANELS
    ========================================== */
 .panels-grid {
   display: grid;
@@ -482,15 +682,17 @@ body {
 }
 
 .panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 28px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
   padding: 2rem;
-  backdrop-filter: saturate(140%) blur(20px);
-  -webkit-backdrop-filter: saturate(140%) blur(20px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 
-              0 5px 15px rgba(0, 0, 0, 0.08),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  backdrop-filter: saturate(180%) blur(25px);
+  -webkit-backdrop-filter: saturate(180%) blur(25px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15), 
+    0 8px 25px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
@@ -499,14 +701,17 @@ body {
 }
 
 .panel:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 
-              0 10px 25px rgba(0, 0, 0, 0.1),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-12px);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.2), 
+    0 15px 35px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .panel:active {
-  transform: translateY(-4px) scale(0.98);
+  transform: translateY(-6px) scale(0.98);
   transition: transform 0.1s ease;
 }
 
@@ -515,26 +720,50 @@ body {
   outline-offset: 2px;
 }
 
-/* Gloss-Effekt für Panels */
+/* Enhanced Gloss-Effekt für Liquid Glass */
 .panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.15), transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: rotate 20s linear infinite;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+
+.panel:hover::before {
+  opacity: 1;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Zusätzlicher Sweep-Effekt */
+.panel::after {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.8s ease;
-  z-index: 1;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 1s ease;
+  z-index: 2;
 }
 
-.panel:hover::before {
+.panel:hover::after {
   left: 100%;
 }
 
 .panel-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .panel h3 {
@@ -542,12 +771,14 @@ body {
   margin-bottom: 1rem;
   font-weight: 600;
   font-size: 1.4rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .panel p {
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================================
@@ -576,6 +807,8 @@ body {
   text-align: center;
   position: relative;
   z-index: 2;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .footer-content {
@@ -587,6 +820,7 @@ body {
 .footer p {
   color: var(--text-muted);
   font-size: 0.9rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================
@@ -626,6 +860,20 @@ body {
 
   .panel {
     padding: 1.5rem;
+  }
+
+  .settings-btn {
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  .scroll-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
   }
 }
 
@@ -672,7 +920,7 @@ body {
   .glass-btn:focus,
   .search-input:focus,
   .panel:focus {
-    outline: 4px solid #000;
+    outline: 4px solid #fff;
     outline-offset: 2px;
   }
 
